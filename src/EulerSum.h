@@ -17,3 +17,8 @@ struct Solution {
 using CalcFunction = std::vector<Solution>(const IndexNum elements_count,
                                            const std::vector<WorkNum>& powers);
 
+using CalcFunction2 = std::vector<Solution>(const IndexNum elements_count,
+                                            const std::vector<WorkNum>& powers,
+                                            const IndexNum from,
+                                            const IndexNum to);
+
