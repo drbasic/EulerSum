@@ -4,9 +4,10 @@
 #include <iostream>
 
 std::vector<Solution>
-NaiveCPU(const IndexNum elements_count, const std::vector<WorkNum>& powers) {
+NaiveCPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+         const IndexNum from, const IndexNum to) {
   std::vector<Solution> result;
-  for (IndexNum a = 1; a < elements_count; ++a) {
+  for (IndexNum a = from; a < to; ++a) {
     for (IndexNum b = 1; b < a; ++b) {
       for (IndexNum c = 1; c < b; ++c) {
         const uint64_t sum_abc = powers[a] + powers[b] + powers[c];

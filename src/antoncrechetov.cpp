@@ -4,13 +4,8 @@
 #include <iostream>
 
 std::vector<Solution>
-AntonCrechetov(const IndexNum elements_count, const std::vector<WorkNum>& powers) {
-  return AntonCrechetov2(elements_count, powers, 1, elements_count);
-}
-
-std::vector<Solution>
-AntonCrechetov2(const IndexNum elements_count, const std::vector<WorkNum>& powers,
-                const IndexNum from, const IndexNum to) {
+AntonCrechetov(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+               const IndexNum from, const IndexNum to) {
   std::vector<Solution> result;
   for (IndexNum a = from; a < to; ++a) {
     for (IndexNum b = a + 1; b < elements_count; ++b) {

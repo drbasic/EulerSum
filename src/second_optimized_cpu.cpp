@@ -3,11 +3,12 @@
 #include <iostream>
 
 std::vector<Solution>
-SecondOptimizedCPU(const IndexNum elements_count, const std::vector<WorkNum>& powers)
+SecondOptimizedCPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+                   const IndexNum from, const IndexNum to)
 {
   std::vector<Solution> result;
   IndexNum rs = 5;
-  for (IndexNum x0 = 1; x0 < elements_count; x0++) {
+  for (IndexNum x0 = from; x0 < to; x0++) {
     for (IndexNum x1 = 1; x1 < x0; x1++) {
       for (IndexNum x2 = 1; x2 < x1; x2++) {
         WorkNum s2 = powers[x0] + powers[x1] + powers[x2];

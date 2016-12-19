@@ -5,10 +5,13 @@
 #include "EulerSum.h"
 
 std::vector<Solution>
-NaiveGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers);
+NaiveGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+         const IndexNum from, const IndexNum to);
 
 std::vector<Solution>
-FirstOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers);
+FirstOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+                  const IndexNum from, const IndexNum to);
 
 std::vector<Solution>
-SecondOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers);
+SecondOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+                   const IndexNum from, const IndexNum to);

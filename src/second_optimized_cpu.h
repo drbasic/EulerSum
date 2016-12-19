@@ -5,4 +5,5 @@
 #include "EulerSum.h"
 
 std::vector<Solution>
-SecondOptimizedCPU(const IndexNum elements_count, const std::vector<WorkNum>& powers);
+SecondOptimizedCPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+                   const IndexNum from, const IndexNum to);

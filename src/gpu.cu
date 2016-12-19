@@ -165,7 +165,8 @@ ComputeOnGpu(const IndexNum elements_count, const std::vector<WorkNum>& powers, 
 }
 
 std::vector<Solution>
-NaiveGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers) {
+NaiveGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+         const IndexNum from, const IndexNum to) {
   auto kernel = [](int elements_count,
                    int blocks_x,
                    int blocks_y,
@@ -179,7 +180,8 @@ NaiveGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers) {
 }
 
 std::vector<Solution>
-FirstOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers) {
+FirstOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+                  const IndexNum from, const IndexNum to) {
   auto kernel = [](int elements_count,
                    int blocks_x,
                    int blocks_y,
@@ -193,7 +195,8 @@ FirstOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& pow
 }
 
 std::vector<Solution>
-SecondOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers) {
+SecondOptimizedGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+                   const IndexNum from, const IndexNum to) {
   auto kernel = [](int elements_count,
                    int blocks_x,
                    int blocks_y,
