@@ -15,8 +15,9 @@ NaiveCPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
           const uint64_t sum = sum_abc + powers[d];
           if (std::binary_search(std::begin(powers), std::end(powers), sum)) {
             const auto it = std::lower_bound(std::begin(powers), std::end(powers), sum);
-            std::cout << a << " " << b << " " << c << " " << d << " " 
-                      << std::distance(std::begin(powers), it) << std::endl;
+            result.emplace_back(Solution{ a, b, c, d, static_cast<IndexNum>(std::distance(std::begin(powers), it)) });
+            //std::cout << a << " " << b << " " << c << " " << d << " " 
+            //          << std::distance(std::begin(powers), it) << std::endl;
           }
         }
       }

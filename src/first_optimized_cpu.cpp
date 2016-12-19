@@ -18,8 +18,8 @@ FirstOptimizedCPU(const IndexNum elements_count, const std::vector<WorkNum>& pow
           while (rs < elements_count - 1 && powers[rs] < sum)
             ++rs;
           if (powers[rs] == sum) {
-            std::cout << x0 << " " << x1 << " " << x2 << " " << x3 << " "
-                      << pow(sum, 1.0 / 5.0) << std::endl;
+            result.emplace_back(Solution{ x0, x1, x2, x3, rs });
+            // std::cout << x0 << " " << x1 << " " << x2 << " " << x3 << " " << rs << std::endl;
           }
         }
       }

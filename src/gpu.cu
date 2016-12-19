@@ -45,7 +45,7 @@ NaiveGPUKernel(const IndexNum elements_count, Solution* solutions) {
         solutions[indx].c = x2;
         solutions[indx].d = x3;
         solutions[indx].e = s;
-        printf("%d %d %d %d %d\n", x0, x1, x2, x3, s);
+        //printf("%d %d %d %d %d\n", x0, x1, x2, x3, s);
       }
     }
   }
@@ -76,7 +76,7 @@ FirstOptimizedGPUKernel(const IndexNum elements_count, Solution* solutions) {
         solutions[indx].c = x2;
         solutions[indx].d = x3;
         solutions[indx].e = s;
-        printf("%d %d %d %d %d\n", x0, x1, x2, x3, s);
+        //printf("%d %d %d %d %d\n", x0, x1, x2, x3, s);
       }
     }
   }
@@ -112,7 +112,7 @@ SecondOptimizedGPUKernel(const IndexNum elements_count, Solution* solutions) {
         solutions[indx].c = x2;
         solutions[indx].d = x3;
         solutions[indx].e = rs;
-        printf("%d %d %d %d %d\n", x0, x1, x2, x3, rs);
+        //printf("%d %d %d %d %d\n", x0, x1, x2, x3, rs);
       }
     }
   }

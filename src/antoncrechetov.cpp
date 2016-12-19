@@ -16,7 +16,7 @@ AntonCrechetov(const IndexNum elements_count, const std::vector<WorkNum>& powers
             const auto it = std::lower_bound(std::begin(powers), std::end(powers), sum);
             IndexNum e = static_cast<IndexNum>(std::distance(std::begin(powers), it));
             result.emplace_back(Solution{a, b, c, d, e});
-            std::cout << a << " " << b << " " << c << " " << d << " " << e << "\n";
+            // std::cout << a << " " << b << " " << c << " " << d << " " << e << "\n";
           }
         }
       }

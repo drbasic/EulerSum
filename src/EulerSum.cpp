@@ -12,6 +12,7 @@
 #include "thread_pool.h"
 
 constexpr size_t thread_count = 4;
+using time_diff = std::chrono::duration<double, std::milli>;
 
 std::vector<Solution>
 RunOnWorkerPool(const IndexNum elements_count, const std::vector<WorkNum>& powers,
@@ -38,30 +39,20 @@ inline WorkNum pow5(const IndexNum n) {
   return pow2 * pow2 * n;
 }
 
-void MeasureTime(const std::string& name,
-                 const IndexNum elements_count,
-                 CalcFunction calc_function,
-                 const bool multi_thread) {
-  std::cout << "Euler sum for N=" << elements_count;
-  if (multi_thread)
-    std::cout << " threads=" << thread_count;
-  std::cout << " <<< " << name << " >>> \n";
-
+time_diff MeasureTime(const IndexNum elements_count,
+                      CalcFunction calc_function,
+                      const bool multi_thread) {
   std::vector<WorkNum> powers(elements_count);
   for (IndexNum i = 0; i < elements_count; ++i) {
     powers[i] = pow5(i);
   }
-
   auto started_at = std::chrono::steady_clock::now();
   if (multi_thread) {
     RunOnWorkerPool(elements_count, powers, calc_function);
   } else {
     calc_function(elements_count, powers, 1, elements_count);
   }
-  auto finished_at = std::chrono::steady_clock::now();
-  std::cout << "Time: "
-            << std::chrono::duration<double, std::milli>(finished_at - started_at).count()
-            << "ms\n";
+  return std::chrono::steady_clock::now() - started_at;
 }
 
 struct TestCase {
@@ -73,32 +64,44 @@ struct TestCase {
 };
 
 int main() {
-  const IndexNum test_Ns[] = { 250, 500, 750, 1000, 1250, 1500 };
+  const IndexNum test_Ns[] = { 100, 250, 500 };//, 750, 1000, 1250, 1500 };
 
   const TestCase test_cases[] = {
-    TestCase{ "Anton Crechetov", &AntonCrechetov, false, 2, 750 },
-    TestCase{ "Anton Crechetov", &AntonCrechetov, true, 2, 750 },
-    TestCase{ "Naive CPU", &NaiveCPU, false, 2, 750  },
-    TestCase{ "Naive CPU", &NaiveCPU, true, 2, 750  },
-    TestCase{ "First optimized CPU", &FirstOptimizedCPU, false, 2, 750 },
-    TestCase{ "First optimized CPU", &FirstOptimizedCPU, true, 2, 750 },
-    TestCase{ "Second optimized CPU", &SecondOptimizedCPU, false, 2 },
-    TestCase{ "Second optimized CPU", &SecondOptimizedCPU, true, 2 },
-    TestCase{ "Second optimized GPU", &NaiveGPU, false, 5 },
-    TestCase{ "Second optimized GPU", &FirstOptimizedGPU, false, 5 },
-    TestCase{ "Second optimized GPU", &SecondOptimizedGPU, false, 5 },
+    TestCase{ "Anton Crechetov",      &AntonCrechetov,     false, 2,  750 },
+    TestCase{ "Anton Crechetov",      &AntonCrechetov,     true,  2,  750 },
+    TestCase{ "Naive CPU",            &NaiveCPU,           false, 2,  750 },
+    TestCase{ "Naive CPU",            &NaiveCPU,           true,  2,  750 },
+    TestCase{ "First optimized CPU",  &FirstOptimizedCPU,  false, 2,  750 },
+    TestCase{ "First optimized CPU",  &FirstOptimizedCPU,  true,  2,  750 },
+    TestCase{ "Second optimized CPU", &SecondOptimizedCPU, false, 2,  5000 },
+    TestCase{ "Second optimized CPU", &SecondOptimizedCPU, true,  2,  5000 },
+
+    TestCase{ "Second optimized GPU", &NaiveGPU,           false, 7, 750 },
+    TestCase{ "Second optimized GPU", &FirstOptimizedGPU,  false, 7, 750 },
+    TestCase{ "Second optimized GPU", &SecondOptimizedGPU, false, 7, 5000 },
   };
 
-  for (auto n : test_Ns) {
+  for (auto elements_count : test_Ns) {
     for (const TestCase& test_case : test_cases) {
-      if (test_case.max_n > n)
+      if (test_case.max_n < elements_count)
         continue;
+
+      std::cout << " <<< " << test_case.name << " >>>\n";
+      std::cout << "  N=" << elements_count;
+      if (test_case.multi_tread)
+        std::cout << " threads=" << thread_count;
+      std::cout << "\n" << std::flush;
+
+      std::vector<time_diff> durations;
       for (int i = 0; i < test_case.run_count; ++i) {
-        MeasureTime(test_case.name,
-                    n,
-                    test_case.calc_function,
-                    test_case.multi_tread);
+        auto duration = MeasureTime(elements_count,
+                                    test_case.calc_function,
+                                    test_case.multi_tread);
+        durations.push_back(duration);
+        std::cout << "    Run " << i + 1 << " time: " << duration.count() << "ms\n" << std::flush;
       }
+      auto it = std::min_element(std::begin(durations), std::end(durations));
+      std::cout << "  Best time: " << it->count() << "ms\n" << std::flush;
     }
   }
 
