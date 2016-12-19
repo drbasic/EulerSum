@@ -35,8 +35,8 @@ RunOnWorkerPool(const IndexNum elements_count, const std::vector<WorkNum>& power
 }
 
 inline WorkNum pow5(const IndexNum n) {
-  const WorkNum pow2 = n * n;
-  return pow2 * pow2 * n;
+  const WorkNum pow2 = static_cast<WorkNum>(n) * static_cast<WorkNum>(n);
+  return pow2 * pow2 * static_cast<WorkNum>(n);
 }
 
 time_diff MeasureTime(const IndexNum elements_count,
@@ -64,7 +64,7 @@ struct TestCase {
 };
 
 int main() {
-  const IndexNum test_Ns[] = { 100, 250, 500 };//, 750, 1000, 1250, 1500 };
+  const IndexNum test_Ns[] = { 100, 250, 500, 750, 1000, 1250, 1500 };
 
   const TestCase test_cases[] = {
     TestCase{ "Anton Crechetov",      &AntonCrechetov,     false, 2,  750 },
@@ -76,8 +76,8 @@ int main() {
     TestCase{ "Second optimized CPU", &SecondOptimizedCPU, false, 2,  5000 },
     TestCase{ "Second optimized CPU", &SecondOptimizedCPU, true,  2,  5000 },
 
-    TestCase{ "Second optimized GPU", &NaiveGPU,           false, 7, 750 },
-    TestCase{ "Second optimized GPU", &FirstOptimizedGPU,  false, 7, 750 },
+    TestCase{ "Naive GPU",            &NaiveGPU,           false, 7, 750 },
+    TestCase{ "First optimized GPU",  &FirstOptimizedGPU,  false, 7, 750 },
     TestCase{ "Second optimized GPU", &SecondOptimizedGPU, false, 7, 5000 },
   };
 
@@ -93,7 +93,7 @@ int main() {
       std::cout << "\n" << std::flush;
 
       std::vector<time_diff> durations;
-      for (int i = 0; i < test_case.run_count; ++i) {
+      for (size_t i = 0; i < test_case.run_count; ++i) {
         auto duration = MeasureTime(elements_count,
                                     test_case.calc_function,
                                     test_case.multi_tread);
