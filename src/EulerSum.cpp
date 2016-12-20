@@ -76,6 +76,7 @@ int main() {
     TestCase{ "Second optimized CPU", &SecondOptimizedCPU, false, 2,  5000 },
     TestCase{ "Second optimized CPU", &SecondOptimizedCPU, true,  2,  5000 },
 
+    TestCase{ "Anton Crechetov GPU",  &AntonCrechetovGPU,  false, 7, 750 },
     TestCase{ "Naive GPU",            &NaiveGPU,           false, 7, 750 },
     TestCase{ "First optimized GPU",  &FirstOptimizedGPU,  false, 7, 750 },
     TestCase{ "Second optimized GPU", &SecondOptimizedGPU, false, 7, 5000 },

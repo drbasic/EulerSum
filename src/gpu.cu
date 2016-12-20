@@ -25,6 +25,31 @@ gpu_binary_search(const IndexNum elements_count,
 }
 
 __global__ void
+AntonCrechetovGPUKernel(const IndexNum elements_count, Solution* solutions) {
+  const int x0 = blockIdx.x;
+  const int x1 = threadIdx.x + blockIdx.y * 1024;
+  if (x1 >= x0)
+    return;
+  if (x0 == 0 || x1 == 0)
+    return;
+  for (int x2 = x1 + 1; x2 < elements_count; ++x2) {
+    for (int x3 = x2 + 1; x3 < elements_count; ++x3) {
+      const WorkNum sum = gpu_powers[x0] + gpu_powers[x1] + gpu_powers[x2] + gpu_powers[x3];
+      auto s = gpu_binary_search(elements_count, sum);
+      if (s > 0) {
+        size_t indx = atomicInc(&solution_count, 1);
+        solutions[indx].a = x0;
+        solutions[indx].b = x1;
+        solutions[indx].c = x2;
+        solutions[indx].d = x3;
+        solutions[indx].e = s;
+        //printf("%d %d %d %d %d\n", x0, x1, x2, x3, s);
+      }
+    }
+  }
+}
+
+__global__ void
 NaiveGPUKernel(const IndexNum elements_count, Solution* solutions) {
   const int x0 = blockIdx.x;
   const int x1 = threadIdx.x + blockIdx.y * 1024;
@@ -162,6 +187,21 @@ ComputeOnGpu(const IndexNum elements_count, const std::vector<WorkNum>& powers, 
     return result;
   }
   return result;
+}
+
+std::vector<Solution>
+AntonCrechetovGPU(const IndexNum elements_count, const std::vector<WorkNum>& powers,
+                  const IndexNum from, const IndexNum to) {
+  auto kernel = [](int elements_count,
+                   int blocks_x,
+                   int blocks_y,
+                   int threads,
+                   Solution *device_solutions) {
+    dim3 grid(blocks_x, blocks_y);
+    AntonCrechetovGPUKernel<<<grid, threads>>>(
+        elements_count, device_solutions);
+  };
+  return ComputeOnGpu(elements_count, powers, kernel);
 }
 
 std::vector<Solution>
