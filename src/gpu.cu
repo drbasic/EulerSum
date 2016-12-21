@@ -26,11 +26,9 @@ gpu_binary_search(const IndexNum elements_count,
 
 __global__ void
 AntonCrechetovGPUKernel(const IndexNum elements_count, Solution* solutions) {
-  const int x0 = blockIdx.x;
-  const int x1 = threadIdx.x + blockIdx.y * 1024;
-  if (x1 >= x0)
-    return;
-  if (x0 == 0 || x1 == 0)
+  const int x0 = blockIdx.x + 1;
+  const int x1 = threadIdx.x + blockIdx.y * blockDim.x + 1;
+  if (x1 <= x0)
     return;
   for (int x2 = x1 + 1; x2 < elements_count; ++x2) {
     for (int x3 = x2 + 1; x3 < elements_count; ++x3) {
@@ -51,11 +49,9 @@ AntonCrechetovGPUKernel(const IndexNum elements_count, Solution* solutions) {
 
 __global__ void
 NaiveGPUKernel(const IndexNum elements_count, Solution* solutions) {
-  const int x0 = blockIdx.x;
-  const int x1 = threadIdx.x + blockIdx.y * 1024;
+  const int x0 = blockIdx.x + 1;
+  const int x1 = threadIdx.x + blockIdx.y * blockDim.x + 1;
   if (x1 >= x0)
-    return;
-  if (x0 == 0 || x1 == 0)
     return;
   const WorkNum s1 = gpu_powers[x0] + gpu_powers[x1];
   for (int x2 = 1; x2 < x1; ++x2) {
@@ -78,11 +74,9 @@ NaiveGPUKernel(const IndexNum elements_count, Solution* solutions) {
 
 __global__ void
 FirstOptimizedGPUKernel(const IndexNum elements_count, Solution* solutions) {
-  const int x0 = blockIdx.x;
-  const int x1 = threadIdx.x + blockIdx.y * 1024;
+  const int x0 = blockIdx.x + 1;
+  const int x1 = threadIdx.x + blockIdx.y * blockDim.x + 1;
   if (x1 >= x0)
-    return;
-  if (x0 == 0 || x1 == 0)
     return;
   IndexNum rs = 5;
   for (int x2 = 1; x2 < x1; ++x2) {
@@ -109,11 +103,9 @@ FirstOptimizedGPUKernel(const IndexNum elements_count, Solution* solutions) {
 
 __global__ void
 SecondOptimizedGPUKernel(const IndexNum elements_count, Solution* solutions) {
-  const int x0 = blockIdx.x;
-  const int x1 = threadIdx.x + blockIdx.y * 1024;
+  const int x0 = blockIdx.x + 1;
+  const int x1 = threadIdx.x + blockIdx.y * blockDim.x + 1;
   if (x1 >= x0)
-    return;
-  if (x0 == 0 || x1 == 0)
     return;
   IndexNum rs = 5;
   const WorkNum s1 = gpu_powers[x0] + gpu_powers[x1];
